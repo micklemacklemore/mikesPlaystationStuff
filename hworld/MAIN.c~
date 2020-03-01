@@ -1,0 +1,35 @@
+#include <stdlib.h>
+#include <libgte.h>
+#include <libgpu.h>
+#include <libgs.h>
+#include "constants.h"
+
+GsOT orderingTable[2];
+short currentBuffer;
+
+int main () {
+
+	initialize();
+	while(1) {
+		FntPrint("Hello!");
+		draw();
+	}
+
+	return 0;
+}
+
+void initialize() {
+	initializeScreen();
+	initializeDebugFont();
+}
+
+void draw() {
+	currentBuffer = GsGetActiveBuff();
+	FntFlush(-1);
+	GsClearOt(0, 0, &orderingTable[currentBuffer]);
+	DrawSync(0);
+	VSync(0);
+	GsSwapDispBuff();
+	GsSortClear(0, 0 , 255, &orderingTable[currentBuffer]);
+	GsDrawOt(&orderingTable[currentBuffer]);
+}
